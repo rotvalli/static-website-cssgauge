@@ -19,7 +19,7 @@
 	 */
         @font-face {
             font-family: weathericons;
-            src: url(weathericons-regular-webfont.woff);
+            src: url(https://http://fonts.peukalo.net/weathericons-regular-webfont.woff);
         }
 
         .wi {
@@ -138,7 +138,7 @@
             document.getElementById("pressureGauge").style.setProperty('--gauge-value', Math.floor(((pressure - min) / (max - min)) * 100));
         }
         function readBarometerData() {
-            fetch("http://ruuvi.peukalo.net/")
+            fetch("https://ruuvi.peukalo.net/")
                 .then(response => response.json())
                 .then(data => updateGauge(data["F7:0A:EC:2E:70:7B"].pressure));
         }
