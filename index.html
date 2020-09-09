@@ -1,1 +1,151 @@
-Test..1..2..3
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Barometer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="gauge.min.css?v=0.2barometer-v=1.0">
+    <style>
+        /*!
+	 *  Weather Icons 2.0.8
+	 *  Author - Erik Flowers - erik@helloerik.com
+	 *  ------------------------------------------------------------------------------
+	 *  Maintained at http://erikflowers.github.io/weather-icons
+	 *
+	 *  License
+	 *  ------------------------------------------------------------------------------
+	 *  - Font licensed under SIL OFL 1.1 -
+	 *    http://scripts.sil.org/OFL
+	 */
+        @font-face {
+            font-family: weathericons;
+            src: url(weathericons-regular-webfont.woff);
+        }
+
+        .wi {
+            display: inline-block;
+            font-family: 'weathericons';
+            font-style: normal;
+            font-weight: normal;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            float: left;
+            position: absolute;
+            font-size: 110%;
+        }
+
+        .wi-day-sunny {
+            top: 40%;
+            left: 65%;
+        }
+
+        .wi-day-sunny:before {
+            content: "\f00d";
+        }
+
+        .wi-day-cloudy {
+            top: 20%;
+            left: 45%;
+        }
+
+        .wi-day-cloudy:before {
+            content: "\f002";
+        }
+
+        .wi-day-rain {
+            top: 40%;
+            left: 25%;
+        }
+
+        .wi-day-rain:before {
+            content: "\f019";
+        }
+
+        body {
+            font-family: sans-serif;
+            background-color: #fffbf2;
+            color: #73664a;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .meters {
+            display: flex;
+            flex-wrap: wrap;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .meters>div {
+            width: 13%;
+            min-width: 300px;
+            margin: 5px;
+            text-align: center;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .location {
+            font-weight: normal;
+            margin-top: 110%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="meters">
+        <div id="pressureGauge" class="gauge" style="
+                --gauge-value:0;
+		--gauge-display-value:0;
+                width:40vw;
+                height:40vw;">
+
+            <i class="wi wi-day-sunny"></i>
+            <i class="wi wi-day-cloudy"></i>
+            <i class="wi wi-day-rain"></i>
+
+            <div class="ticks">
+                <div class="tithe" style="--gauge-tithe-tick:1;"></div>
+                <div class="tithe" style="--gauge-tithe-tick:2;"></div>
+                <div class="tithe" style="--gauge-tithe-tick:3;"></div>
+                <div class="tithe" style="--gauge-tithe-tick:4;"></div>
+                <div class="tithe" style="--gauge-tithe-tick:6;"></div>
+                <div class="tithe" style="--gauge-tithe-tick:7;"></div>
+                <div class="tithe" style="--gauge-tithe-tick:8;"></div>
+                <div class="tithe" style="--gauge-tithe-tick:9;"></div>
+                <div class="min"></div>
+                <div class="mid"></div>
+                <div class="max"></div>
+            </div>
+            <div class="tick-circle"></div>
+
+            <div class="needle">
+                <div class="needle-head"></div>
+            </div>
+            <div class="labels">
+                <div class="value-label"></div>
+                <div class="location">Tampere</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        //<![CDATA[
+        const min = 960;
+        const max = 1060;
+        const updateGauge = (pressure) => {
+            document.getElementById("pressureGauge").style.setProperty('--gauge-display-value', parseInt(pressure));
+            document.getElementById("pressureGauge").style.setProperty('--gauge-value', Math.floor(((pressure - min) / (max - min)) * 100));
+        }
+        function readBarometerData() {
+            fetch("http://ruuvi.peukalo.net/")
+                .then(response => response.json())
+                .then(data => updateGauge(data["F7:0A:EC:2E:70:7B"].pressure));
+        }
+        readBarometerData();
+        setTimeout(readBarometerData, 300000);
+        //]]>
+    </script>
+</body>
+
+</html>
